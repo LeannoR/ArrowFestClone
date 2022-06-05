@@ -51,6 +51,22 @@ public class TrackCheckpoints : MonoBehaviour
             ParentArrow.instance.CreatingArrows(value);
         }
     }
+    public void IsArrowGoThroughOtherGate(CheckPoint checkpoint)
+    {
+        int realGateNumber = int.Parse(checkpoint.GetComponent<ShowText>().gateNumber);
+
+        foreach (GameObject Childcheckpoint in checkpoints)
+        {
+            CheckPoint checkPoint = Childcheckpoint.GetComponent<CheckPoint>();
+            ShowText showText = Childcheckpoint.GetComponent<ShowText>();
+            int gateNumber = int.Parse(showText.gateNumber);
+            if(gateNumber == realGateNumber)
+            {
+                checkPoint.isArrowGoThrough = true;
+            }
+        }
+
+    }
 
 
 

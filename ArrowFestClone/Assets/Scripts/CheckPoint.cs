@@ -14,6 +14,7 @@ public class CheckPoint : MonoBehaviour
             if(IsArrowGoThrough() == false)
             {
                 trackCheckpoints.ArrowThroughCheckpoint(this);
+                trackCheckpoints.IsArrowGoThroughOtherGate(this);
                 isArrowGoThrough = true;
             }
         }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ShowText : MonoBehaviour
 {
 
-    [SerializeField] public string textValue;
+    [SerializeField] public string gateNumber;
     [SerializeField] public Text textElement;
     public static ShowText instance;
 

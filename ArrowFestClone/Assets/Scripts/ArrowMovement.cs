@@ -5,7 +5,6 @@ using UnityEngine;
 public class ArrowMovement : MonoBehaviour
 {
     [SerializeField] float forwardSpeed = 30f;
-    [SerializeField] float sidewaySpeed = 2f;
     public float Multiplier = 1f;
     public float ScaleMultiplier = 1f;
 
