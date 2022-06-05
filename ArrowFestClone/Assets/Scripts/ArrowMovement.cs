@@ -6,64 +6,58 @@ public class ArrowMovement : MonoBehaviour
 {
     [SerializeField] float forwardSpeed = 30f;
     [SerializeField] float sidewaySpeed = 2f;
-    public Camera camera;
-    
+    public float Multiplier = 1f;
+    public float ScaleMultiplier = 1f;
 
-    Vector3 mousePos;
-    float mousePosX;
-    Vector3 hitPos;
-    void Start()
-    {
-        camera = Camera.main;
-        LockMouseCursor();
-        
-    }
+    private Vector3 previousMousePos;
     void Update()
     {
         ForwardMovement();
-        SideWayMovement();
+        SideWaySwipe();
+        LockHorizontalPosition();
+        LockScale();
     }
 
     void ForwardMovement()
     {
         transform.position = transform.position + Vector3.forward * forwardSpeed * Time.deltaTime;
     }
-    void SideWayMovement()
+    public void SideWaySwipe()
     {
-        mousePos = Input.mousePosition;
-        mousePos.z = camera.transform.localPosition.z;
-        RaycastHit hit;
-        if (Physics.Raycast(camera.ScreenPointToRay(mousePos), out hit, Mathf.Infinity));
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            GameObject firstArrow = ParentArrow.instance.arrows[0];
-            firstArrow.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            hitPos = hit.point;
-            hitPos.y = firstArrow.transform.localPosition.y;
-            hitPos.z = firstArrow.transform.localPosition.z;
-            firstArrow.transform.localPosition = Vector3.MoveTowards(firstArrow.transform.localPosition,hitPos,Time.deltaTime * sidewaySpeed);
+            previousMousePos = Input.mousePosition;
+        }
+        else if(Input.GetKey(KeyCode.Mouse0))
+        {
+            var newpos = Input.mousePosition;
+            var difpos = newpos - previousMousePos;
+            var horizontal = difpos.x * Time.deltaTime * Multiplier;
+            var horizontalScale = difpos.x * Time.deltaTime * ScaleMultiplier;
+
+            if(transform.position.x > 0)
+            {
+                transform.localScale = transform.localScale - transform.right * horizontalScale;
+            }
+            else if(transform.position.x < 0)
+            {
+                transform.localScale = transform.localScale + transform.right * horizontalScale;
+            }
+
+            transform.position = transform.position + transform.right * horizontal;
         }
     }
 
-    void LockMouseCursor()
+    public void LockHorizontalPosition()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        var pos = transform.position;
+        pos.x = Mathf.Clamp(transform.position.x, -10, 10);
+        transform.position = pos;
     }
-
-    void LimitVertical()
+    public void LockScale()
     {
-        mousePosX = Mathf.Clamp(mousePosX, -10, 10);
-    }
-
-
-    bool isTouchingScreen()
-    {
-        if(Input.touchCount == 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        var scale = transform.localScale;
+        scale.x = Mathf.Clamp(transform.localScale.x, 1, 2);
+        transform.localScale = scale;
     }
 }

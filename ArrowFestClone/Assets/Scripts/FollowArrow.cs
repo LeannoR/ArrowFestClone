@@ -8,6 +8,12 @@ public class FollowArrow : MonoBehaviour
     public Transform arrows;
     void Update()
     {
-        transform.position = arrows.position + offset; 
+        CameraPosition();
+    }
+    public void CameraPosition()
+    {
+        var cameraPos = arrows.position + offset;
+        cameraPos.x = Mathf.Clamp(0, 0, 0);
+        transform.position = cameraPos;
     }
 }
