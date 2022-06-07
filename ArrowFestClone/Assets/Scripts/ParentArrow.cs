@@ -1,18 +1,21 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ParentArrow : MonoBehaviour
 {
-    [SerializeField] public Text arrowCountText;
+    [SerializeField] public TextMeshProUGUI arrowCountText;
 
     public static ParentArrow instance;
     public List<GameObject> arrows = new List<GameObject>();
     public GameObject parentArrow;
     public Transform transformParent;
 
-    public float radius = 0.1f;
+    public float ArrowGap = .5f;
+    public float RadiusIncrease = 1f;
     public float degree = 1f;
+    public float circleLength = 1f;
 
     private void Awake()
     {
@@ -35,7 +38,7 @@ public class ParentArrow : MonoBehaviour
             arrows.Add(newArrow);
             newArrow.transform.parent = transform;
         }
-        PositioningArrows();
+        ArrowPosition();
     }
     public void DestroyArrows(int value)
     {
@@ -44,26 +47,26 @@ public class ParentArrow : MonoBehaviour
             Destroy(arrows[arrows.Count - 1]);
             arrows.RemoveAt(arrows.Count - 1);
         }
-        PositioningArrows();
+        ArrowPosition();
     }
 
-    public void PositioningArrows()
+    public void ArrowPosition()
     {
-        degree = 360 / arrows.Count;
-        
-        for(int i = 0; i < arrows.Count; i++)
+        arrows[0].transform.localPosition = Vector3.zero;
+        var i = 1;
+        var r = RadiusIncrease;
+        while(i < arrows.Count)
         {
-            MoveObjects(arrows[i].transform, i * degree);
+            var length = 2 * Mathf.PI * r;
+            var arrowCount = length / ArrowGap;
+            var angle = 360f / arrowCount;
+            for (var j = 0; j < arrowCount && i < arrows.Count; j++, i++)
+            {
+                var arrowPos = Quaternion.AngleAxis(angle * j, Vector3.forward) * Vector3.up * r;
+                arrows[i].transform.localPosition = arrowPos;
+            }
+            r += RadiusIncrease;
         }
-    }
-
-    public void MoveObjects(Transform newObjectTransform, float degree)
-    {
-        radius += 0.05f;
-        Vector3 newPos = Vector3.zero;
-        newPos.x = Mathf.Cos(degree * Mathf.Deg2Rad);
-        newPos.y = Mathf.Sin(degree * Mathf.Deg2Rad);
-        newObjectTransform.localPosition = newPos;
     }
     public void DisplayArrowCount()
     {

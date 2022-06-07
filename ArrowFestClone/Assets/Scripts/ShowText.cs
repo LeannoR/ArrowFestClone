@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ public class ShowText : MonoBehaviour
 {
 
     [SerializeField] public string gateNumber;
-    [SerializeField] public Text textElement;
+    [SerializeField] public TextMeshProUGUI textElement;
     public static ShowText instance;
 
     private void Awake()

@@ -32,8 +32,8 @@ public class TrackCheckpoints : MonoBehaviour
         int arrowsCount = ParentArrow.instance.arrows.Count;
         if(operatorValue == "/")
         {
-            value /= arrowsCount;
-            ParentArrow.instance.DestroyArrows(value);
+            value = arrowsCount / value;
+            ParentArrow.instance.DestroyArrows(arrowsCount - value);
         }
         else if (operatorValue == "*")
         {
@@ -42,7 +42,6 @@ public class TrackCheckpoints : MonoBehaviour
         }
         else if (operatorValue == "-")
         {
-            value -= arrowsCount;
             ParentArrow.instance.DestroyArrows(value);
         }
         else
